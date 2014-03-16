@@ -11,19 +11,23 @@ object Dependencies {
     "com.typesafe" %% "scalalogging-slf4j" % "1.1.0"
   )
 
+  private val scalatestVersion = "2.0"
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.2.0",
-    "org.scalatest" %% "scalatest" % "2.0" % "test",
+    "org.scalatest" %% "scalatest" % scalatestVersion  % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
+  val scalatestInCompileScope = "org.scalatest" %% "scalatest" % scalatestVersion
 
+  private val fongoVersion = "1.3.7"
   val mongodbStack = Seq(
     "net.liftweb" %% "lift-mongodb-record" % "2.5.1",
     "org.mongodb" % "mongo-java-driver" % "2.11.4",
-    "com.github.fakemongo" % "fongo" % "1.3.7" % "test",
+    "com.github.fakemongo" % "fongo" % fongoVersion % "test",
     "org.mongodb" %% "casbah" % "2.6.5" exclude(org = "org.scala-lang", name = "scala-library")
   )
 
+  val fongoInCompileScope = "com.github.fakemongo" % "fongo" % fongoVersion
 }
 
 object TheGardenBuild extends Build {
@@ -59,7 +63,8 @@ object TheGardenBuild extends Build {
         </developer>
       </developers>,
     licenses := ("Apache2", new java.net.URL("http://www.apache.org/licenses/LICENSE-2.0.txt")) :: Nil,
-    homepage := Some(new java.net.URL("http://www.softwaremill.com"))
+    homepage := Some(new java.net.URL("http://www.softwaremill.com")),
+    libraryDependencies ++= baseDependencies
   )
 
   lazy val lawn = Project(id = "lawn",
@@ -69,8 +74,14 @@ object TheGardenBuild extends Build {
   lazy val mongodb = Project(id = "mongodb",
     base = file("mongodb"),
     settings = rootSettings).settings(
-      libraryDependencies ++= baseDependencies ++ mongodbStack ++ logging
+      libraryDependencies ++= mongodbStack ++ logging
     ).
     settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*)
+
+  lazy val mongodbTest = Project(id = "mongodb-test",
+    base = file("mongodb-test"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= mongodbStack ++ logging ++ Seq(scalatestInCompileScope, fongoInCompileScope)
+    )
 
 }
