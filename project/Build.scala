@@ -37,7 +37,7 @@ object TheGardenBuild extends Build {
   override val settings = super.settings ++ Seq(isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
 
   lazy val rootSettings: Seq[Setting[_]] = Project.defaultSettings ++ Seq(
-    version := "0.0.3-SNAPSHOT",
+    version := "0.0.4-SNAPSHOT",
     scalaVersion := "2.10.3",
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
