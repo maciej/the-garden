@@ -19,7 +19,7 @@ object Dependencies {
 
   /* Mongo, Lift-Record, Rogue, Casbah */
   private val casbah = "org.mongodb" %% "casbah" % "2.6.5" exclude(org = "org.scala-lang", name = "scala-library")
-//  private val rogueVersion = "2.2.0"
+  //  private val rogueVersion = "2.2.0"
   val mongodbStack = Seq(
     "net.liftweb" %% "lift-mongodb-record" % "2.5.1",
     "org.mongodb" % "mongo-java-driver" % "2.11.4",
@@ -37,8 +37,33 @@ object TheGardenBuild extends Build {
   override val settings = super.settings ++ Seq(isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
 
   lazy val rootSettings: Seq[Setting[_]] = Project.defaultSettings ++ Seq(
-    version := "0.0.2",
-    scalaVersion := "2.10.3"
+    version := "0.0.2-SNAPSHOT",
+    scalaVersion := "2.10.3",
+    organization := "com.softwaremill.thegarden",
+    publishTo <<= version {
+      (v: String) =>
+        val nexus = "https://nexus.softwaremill.com/"
+        if (v.trim.endsWith("SNAPSHOT"))
+          Some("snapshots" at nexus + "content/repositories/snapshots")
+        else
+          Some("releases" at nexus + "content/repositories/releases")
+    },
+    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+    publishMavenStyle := true,
+    publishArtifact in Test := false,
+    pomExtra := <scm>
+      <url>git@github.com:maciej/the-garden.git</url>
+      <connection>scm:git:git@github.com:maciej/the-garden.git</connection>
+    </scm>
+      <developers>
+        <developer>
+          <id>maciej</id>
+          <name>Maciej Bilas</name>
+          <url>http://twitter.com/maciejb</url>
+        </developer>
+      </developers>,
+    licenses := ("Apache2", new java.net.URL("http://www.apache.org/licenses/LICENSE-2.0.txt")) :: Nil,
+    homepage := Some(new java.net.URL("http://www.softwaremill.com"))
   )
 
   lazy val lawn = Project(id = "lawn",

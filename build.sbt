@@ -1,9 +1,5 @@
 name := "the-garden"
 
-organization in GlobalScope := "com.typesafe"
-
-scalaVersion in ThisBuild := "2.10.3"
-
 scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature")
 
 scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature")
