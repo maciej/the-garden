@@ -12,20 +12,16 @@ object Dependencies {
   )
 
   val baseDependencies = Seq(
-    "org.scalatest" %% "scalatest" % "2.0" % "test",
     "com.typesafe" % "config" % "1.2.0",
+    "org.scalatest" %% "scalatest" % "2.0" % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
 
-  /* Mongo, Lift-Record, Rogue, Casbah */
-  private val casbah = "org.mongodb" %% "casbah" % "2.6.5" exclude(org = "org.scala-lang", name = "scala-library")
-  //  private val rogueVersion = "2.2.0"
   val mongodbStack = Seq(
     "net.liftweb" %% "lift-mongodb-record" % "2.5.1",
     "org.mongodb" % "mongo-java-driver" % "2.11.4",
-    "com.github.fakemongo" % "fongo" % "1.3.7" % "test"
-  ) ++ Seq(
-    casbah
+    "com.github.fakemongo" % "fongo" % "1.3.7" % "test",
+    "org.mongodb" %% "casbah" % "2.6.5" exclude(org = "org.scala-lang", name = "scala-library")
   )
 
 }
@@ -37,7 +33,7 @@ object TheGardenBuild extends Build {
   override val settings = super.settings ++ Seq(isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
 
   lazy val rootSettings: Seq[Setting[_]] = Project.defaultSettings ++ Seq(
-    version := "0.0.2-SNAPSHOT",
+    version := "0.0.3-SNAPSHOT",
     scalaVersion := "2.10.3",
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
