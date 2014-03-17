@@ -47,7 +47,7 @@ object TheGardenBuild extends Build {
     scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
-    version := "0.0.6-SNAPSHOT",
+    version := "0.0.7-SNAPSHOT",
     scalaVersion := "2.10.3",
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
@@ -79,7 +79,9 @@ object TheGardenBuild extends Build {
 
   lazy val lawn = Project(id = "lawn",
     base = file("lawn"),
-    settings = rootSettings)
+    settings = rootSettings).settings(
+      libraryDependencies ++= jodaTime
+    )
 
   lazy val shrubs = Project(id = "shrubs",
     base = file("shrubs"),
