@@ -21,3 +21,5 @@ trait Timing {
   }
 
 }
+
+object Timing extends Timing
