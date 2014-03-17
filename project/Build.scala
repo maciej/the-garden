@@ -14,7 +14,7 @@ object Dependencies {
   private val scalatestVersion = "2.0"
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.2.0",
-    "org.scalatest" %% "scalatest" % scalatestVersion  % "test",
+    "org.scalatest" %% "scalatest" % scalatestVersion % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
   val scalatestInCompileScope = "org.scalatest" %% "scalatest" % scalatestVersion
@@ -28,16 +28,26 @@ object Dependencies {
   )
 
   val fongoInCompileScope = "com.github.fakemongo" % "fongo" % fongoVersion
+
+  val jodaTime = Seq(
+    "joda-time" % "joda-time" % "2.1",
+    "org.joda" % "joda-convert" % "1.2")
 }
 
 object TheGardenBuild extends Build {
 
   import Dependencies._
 
-  override val settings = super.settings ++ Seq(isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
+  override val settings = super.settings ++ Seq(
+    name := "the-garden",
+    isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
 
   lazy val rootSettings: Seq[Setting[_]] = Project.defaultSettings ++ Seq(
-    version := "0.0.4-SNAPSHOT",
+    scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
+    scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
+    // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
+    javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
+    version := "0.0.6-SNAPSHOT",
     scalaVersion := "2.10.3",
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
@@ -71,17 +81,26 @@ object TheGardenBuild extends Build {
     base = file("lawn"),
     settings = rootSettings)
 
+  lazy val shrubs = Project(id = "shrubs",
+    base = file("shrubs"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= Seq(scalatestInCompileScope) ++ jodaTime
+    )
+
   lazy val mongodb = Project(id = "mongodb",
     base = file("mongodb"),
     settings = rootSettings).settings(
       libraryDependencies ++= mongodbStack ++ logging
-    ).
-    settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*)
+    ).settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*)
 
   lazy val mongodbTest = Project(id = "mongodb-test",
     base = file("mongodb-test"),
     settings = rootSettings).settings(
       libraryDependencies ++= mongodbStack ++ logging ++ Seq(scalatestInCompileScope, fongoInCompileScope)
     )
+
+  lazy val theGarden = Project(id = "the-garden",
+    base = file(""),
+    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest)
 
 }
