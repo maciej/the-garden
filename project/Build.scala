@@ -31,7 +31,14 @@ object Dependencies {
 
   val jodaTime = Seq(
     "joda-time" % "joda-time" % "2.1",
-    "org.joda" % "joda-convert" % "1.2")
+    "org.joda" % "joda-convert" % "1.2"
+  )
+
+  val json4sVersion = "3.2.8"
+  val json4s = Seq(
+    "org.json4s" %% "json4s-jackson" % json4sVersion
+  )
+  val json4sInProvidedScope = json4s.map(_ % "provided")
 }
 
 object TheGardenBuild extends Build {
@@ -86,7 +93,7 @@ object TheGardenBuild extends Build {
   lazy val shrubs = Project(id = "shrubs",
     base = file("shrubs"),
     settings = rootSettings).settings(
-      libraryDependencies ++= Seq(scalatestInCompileScope) ++ jodaTime
+      libraryDependencies ++= Seq(scalatestInCompileScope) ++ jodaTime ++ json4sInProvidedScope
     )
 
   lazy val mongodb = Project(id = "mongodb",
