@@ -9,7 +9,7 @@ trait FongoSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
 
   private def newUuid() = java.util.UUID.randomUUID.toString
 
-  private val dbName = newUuid()
+  protected val dbName = newUuid()
 
   lazy val fongo = new Fongo(newUuid())
 
