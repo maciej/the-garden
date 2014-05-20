@@ -87,7 +87,7 @@ object TheGardenBuild extends Build {
   lazy val lawn = Project(id = "lawn",
     base = file("lawn"),
     settings = rootSettings).settings(
-      libraryDependencies ++= jodaTime
+      libraryDependencies ++= jodaTime ++ logging
     )
 
   lazy val shrubs = Project(id = "shrubs",
