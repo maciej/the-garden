@@ -6,11 +6,15 @@ import scala.ref.WeakReference
 
 
 class LifeCycleManager extends Logging {
-  val closeableQueue = new mutable.SynchronizedQueue[WeakReference[Closeable]]()
+
+  /*
+   * TODO Closeables should be weakly referenced by their T
+   */
+
+  val closeableQueue = new mutable.SynchronizedQueue[Closeable]()
 
   def close() {
-    closeableQueue.dequeueAll(_ => true).foreach { serviceRef =>
-      serviceRef.get.map { service =>
+    closeableQueue.dequeueAll(_ => true).foreach { service =>
         try {
           service.close()
         } catch {
@@ -19,8 +23,24 @@ class LifeCycleManager extends Logging {
             logger.error(s"Exception caught while closing $serviceClassName.", e)
         }
       }
-    }
   }
+}
+
+trait DefaultLifeCycleManagerModule {
+
+  lazy val lifecycleManager = new LifeCycleManager
+
+  def withLifeCycle[T](lifecycleService: T)(closeFun: (T => Unit)): T = {
+    new WithLifeCycle[T] {
+      override protected val manager: LifeCycleManager = lifecycleManager
+      override protected val underlying: T = lifecycleService
+
+      override def close() = closeFun(underlying)
+    }.service
+  }
+
+  def withCloseable[T <: Closeable](lifecycleService: T) =
+    new CloseableLifeCycleService[T](lifecycleManager, lifecycleService).service
 }
 
 trait WithLifeCycle[T] extends Closeable {
@@ -28,16 +48,16 @@ trait WithLifeCycle[T] extends Closeable {
   protected val manager: LifeCycleManager
 
   protected def registerCloseable(closeable: Closeable) = {
-    manager.closeableQueue.enqueue(WeakReference(closeable))
+    manager.closeableQueue.enqueue(closeable)
   }
 
   def close()
 
   protected val underlying: T
 
-  val service: T = {
+  lazy val service: T = {
     registerCloseable(this)
-    service
+    underlying
   }
 
 }
@@ -47,7 +67,6 @@ class CloseableLifeCycleService[T <: Closeable](protected val manager: LifeCycle
 
   override def close() = underlying.close()
 }
-
 
 
 trait Closeable {

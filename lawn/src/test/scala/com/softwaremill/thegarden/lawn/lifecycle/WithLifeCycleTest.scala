@@ -19,8 +19,26 @@ class WithLifeCycleTest extends FlatSpec with ShouldMatchers {
 
     module.lifecycleManager.closeableQueue.length shouldEqual 1
   }
+
 }
 
+
+class WithDefaultLifeCycleManagerTest extends FlatSpec with ShouldMatchers {
+
+  it should "not have any CloseableServices registered for closing if not referenced" in {
+    val module = new UsingDLCModule
+
+    module.lifecycleManager.closeableQueue.length shouldEqual 0
+  }
+
+  it should "have both closeable services registered if referenced" in {
+    val module = new UsingDLCModule
+
+    Seq(module.nicelyCloseableServiceManager, module.genericCloseableServiceManager)
+
+    module.lifecycleManager.closeableQueue.length shouldEqual 2
+  }
+}
 
 class CloseableService extends Closeable with Logging {
 
@@ -41,4 +59,18 @@ class LifeCycleModule {
   lazy val closeableService = new CloseableLifeCycleService(lifecycleManager, new CloseableService).service
 
   lazy val serviceManager = new ServiceManager(closeableService)
+}
+
+class UsingDLCModule extends DefaultLifeCycleManagerModule {
+
+  lazy val withLifecycleService = withLifeCycle(new CloseableService) {
+    service => service.close()
+  }
+
+  lazy val withCloseableService = withCloseable(new CloseableService)
+
+  lazy val nicelyCloseableServiceManager = new ServiceManager(withCloseableService)
+
+  lazy val genericCloseableServiceManager = new ServiceManager(withLifecycleService)
+
 }
