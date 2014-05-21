@@ -6,7 +6,7 @@ import scala.util.control.NonFatal
  * Taken from http://illegalexception.schlichtherle.de/2012/07/19/try-with-resources-for-scala/
  * and modified
  */
-class Loan[A <: AutoCloseable](resource: A) extends BaseLoan[A] {
+class Loan[A <: AutoCloseable](resource: A) {
   def to[B](block: A => B) = {
     var t: Throwable = null
     try {
@@ -30,7 +30,7 @@ class Loan[A <: AutoCloseable](resource: A) extends BaseLoan[A] {
 }
 
 /* Structural typed version of Loan. I hate this () code repetition */
-class AnyLoan[A <: {def close() : Unit}](resource: A) extends BaseLoan[A] {
+class LoanWithCloser[A](resource: A, closeFun: () => Unit) {
   def to[B](block: A => B) = {
     var t: Throwable = null
     try {
@@ -41,24 +41,22 @@ class AnyLoan[A <: {def close() : Unit}](resource: A) extends BaseLoan[A] {
       if (resource != null) {
         if (t != null) {
           try {
-            resource.close()
+            closeFun()
           } catch {
             case NonFatal(y) => t.addSuppressed(y)
           }
         } else {
-          resource.close()
+          closeFun()
         }
       }
     }
   }
 }
 
-trait BaseLoan[A] {
-  def to[B](block: A => B)
-}
-
 object Loan {
   def loan[A <: AutoCloseable](resource: A) = new Loan(resource)
 
-  def loanAny[A <: {def close() : Unit}](resource: A) = new AnyLoan(resource)
+  def loanAny[A <: {def close() : Unit}](resource: A) = new LoanWithCloser(resource, resource.close)
+
+  def loanWithCloser[A](resource: A)(closeFun: A => Unit) = new LoanWithCloser(resource, () => {closeFun(resource)})
 }

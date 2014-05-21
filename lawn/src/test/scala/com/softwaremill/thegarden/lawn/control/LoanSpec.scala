@@ -2,9 +2,8 @@ package com.softwaremill.thegarden.lawn.control
 
 import org.scalatest.{ShouldMatchers, FlatSpec}
 
-
-import com.softwaremill.thegarden.lawn.control.Loan.{loan, loanAny}
-import java.util.concurrent.atomic.AtomicBoolean
+import com.softwaremill.thegarden.lawn.control.Loan.{loan, loanAny, loanWithCloser}
+import java.util.concurrent.atomic.{AtomicInteger, AtomicBoolean}
 
 class LoanSpec extends FlatSpec with ShouldMatchers {
 
@@ -55,6 +54,16 @@ class LoanSpec extends FlatSpec with ShouldMatchers {
     }
   }
 
+  "loanWithCloser" should "call close() only once" in {
+    val countingCloseable = new CountingCloseable
+
+    loanWithCloser(countingCloseable)(_.close()) to { resource =>
+      /* do nothing */
+    }
+
+    countingCloseable.counter.get() shouldEqual 1
+  }
+
 }
 
 
@@ -66,4 +75,14 @@ class CloseableOnce extends AutoCloseable {
     closed.set(true)
   }
 
+}
+
+class CountingCloseable extends AutoCloseable {
+
+  val counter = new AtomicInteger(0)
+
+  override def close() = {
+    counter.incrementAndGet()
+    Unit
+  }
 }
