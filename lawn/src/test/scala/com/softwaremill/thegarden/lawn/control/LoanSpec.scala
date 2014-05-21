@@ -3,7 +3,7 @@ package com.softwaremill.thegarden.lawn.control
 import org.scalatest.{ShouldMatchers, FlatSpec}
 
 
-import com.softwaremill.thegarden.lawn.control.Loan.loan
+import com.softwaremill.thegarden.lawn.control.Loan.{loan, loanAny}
 import java.util.concurrent.atomic.AtomicBoolean
 
 class LoanSpec extends FlatSpec with ShouldMatchers {
@@ -38,6 +38,20 @@ class LoanSpec extends FlatSpec with ShouldMatchers {
         e shouldEqual thrownException
     } finally {
       caughtException shouldBe true
+    }
+  }
+
+  it should "close a structurally typed resource if even if the block throws an exception" in {
+    val closeableOnce = new CloseableOnce
+
+    try {
+      loanAny(closeableOnce) to { closeable =>
+        throw new RuntimeException("Foo !")
+      }
+    } catch {
+      case e: RuntimeException =>
+    } finally {
+      closeableOnce.closed.get() shouldBe true
     }
   }
 
