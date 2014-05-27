@@ -1,5 +1,7 @@
 package com.softwaremill.thegarden.lawn.control
 
+import scala.language.reflectiveCalls
+
 import scala.util.control.NonFatal
 
 /*
