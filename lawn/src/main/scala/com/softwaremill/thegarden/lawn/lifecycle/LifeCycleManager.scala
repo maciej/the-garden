@@ -28,11 +28,6 @@ class LifeCycleManager extends Logging {
 
 trait WithLifeCycleManager {
   def lifecycleManager: LifeCycleManager
-}
-
-trait DefaultLifeCycleManagerModule extends WithLifeCycleManager {
-
-  lazy val lifecycleManager = new LifeCycleManager
 
   def withLifeCycle[T](lifecycleService: T)(closeFun: (T => Unit)): T = {
     new WithLifeCycle[T] {
@@ -45,6 +40,11 @@ trait DefaultLifeCycleManagerModule extends WithLifeCycleManager {
 
   def withCloseable[T <: Closeable](lifecycleService: T) =
     new DestroyableLifeCycleService[T](lifecycleManager, lifecycleService).service
+}
+
+trait DefaultLifeCycleManagerModule extends WithLifeCycleManager {
+
+  lazy val lifecycleManager = new LifeCycleManager
 }
 
 trait DestroyOnShutdown {
