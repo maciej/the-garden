@@ -1,7 +1,5 @@
 package com.softwaremill.thegarden.lawn.lifecycle
 
-import java.io.Closeable
-
 trait WithLifeCycle[T] extends Closeable {
 
   protected val manager: LifeCycleManager

@@ -2,7 +2,6 @@ package com.softwaremill.thegarden.lawn.lifecycle
 
 import com.typesafe.scalalogging.slf4j.Logging
 import scala.collection.mutable
-import java.io.Closeable
 
 class LifeCycleManager extends Logging {
 

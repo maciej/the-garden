@@ -1,7 +1,6 @@
 package com.softwaremill.thegarden.lawn.lifecycle
 
 import org.scalatest.{ShouldMatchers, FlatSpec}
-import java.io.Closeable
 import scala.collection.mutable.ArrayBuffer
 
 
