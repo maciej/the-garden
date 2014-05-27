@@ -30,4 +30,4 @@ trait UserModule extends MacWire with DefaultLifeCycleManagerModule {
 }
 ````
 
-If the `UserService` implements `java.io.Closeable` (which is unlikely) you can skip the close function block.
+If the `UserService` implements `com.softwaremill.thegarden.lawn.lifecycle.Closeable` you can skip the close function block.
