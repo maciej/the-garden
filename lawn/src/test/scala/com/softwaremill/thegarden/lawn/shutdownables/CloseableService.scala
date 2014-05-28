@@ -1,10 +1,10 @@
-package com.softwaremill.thegarden.lawn.lifecycle
+package com.softwaremill.thegarden.lawn.shutdownables
 
 import com.typesafe.scalalogging.slf4j.Logging
 
-class CloseableService extends Closeable with Logging {
+class CloseableService extends Shutdownable with Logging {
 
-  def close() = {
+  def shutdown() = {
     logger.debug("Closing CloseableService.")
   }
 }
