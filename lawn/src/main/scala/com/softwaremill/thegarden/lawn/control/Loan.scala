@@ -62,3 +62,7 @@ object Loan {
 
   def loanWithCloser[A](resource: A)(closeFun: A => Unit) = new LoanWithCloser(resource, () => {closeFun(resource)})
 }
+
+// Some more reading material about the Loan pattern and Scala ARM:
+// https://groups.google.com/forum/#!topic/scala-language/vZaydwTP6Jg
+// http://jsuereth.com/scala-arm/
