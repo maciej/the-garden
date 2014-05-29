@@ -1,7 +1,6 @@
 package com.softwaremill.thegarden.mongodbtest
 
-import org.scalatest.{ShouldMatchers, Args, FlatSpec}
-import net.liftweb.mongodb.MongoDB
+import org.scalatest.{ShouldMatchers, FlatSpec}
 import com.mongodb.casbah.Imports._
 import com.mongodb.DBCollection
 
@@ -14,23 +13,18 @@ class FongoSupportSpec extends FlatSpec with ShouldMatchers {
 
     it should "run one test" in {
       import com.mongodb.casbah.Imports._
-      import net.liftweb.mongodb.MongoDB
 
-      MongoDB.useCollection("test_coll") {
-        coll =>
-          coll.save(DBObject("foo" -> "bar"))
-      }
+      val coll = fongo.getDB(dbName).getCollection("test_coll")
+      coll.save(DBObject("foo" -> "bar"))
     }
 
     it should "run another test" in {
-      MongoDB.useCollection("test_coll") {
-        coll =>
-          coll.save(DBObject("foo2" -> "bar2"))
-      }
+      val coll = fongo.getDB(dbName).getCollection("test_coll")
+      coll.save(DBObject("foo2" -> "bar2"))
     }
 
     override protected def afterAll() = {
-      MongoDB.useCollection("test_coll")(afterAllBlock)
+      afterAllBlock(fongo.getDB(dbName).getCollection("test_coll"))
       super.afterAll()
     }
   }

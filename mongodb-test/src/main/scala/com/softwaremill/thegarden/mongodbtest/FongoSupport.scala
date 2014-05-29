@@ -1,7 +1,6 @@
 package com.softwaremill.thegarden.mongodbtest
 
 import com.github.fakemongo.Fongo
-import net.liftweb.mongodb.{DefaultMongoIdentifier, MongoDB}
 import org.scalatest.{BeforeAndAfterEach, Suite, BeforeAndAfterAll}
 
 trait FongoSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
@@ -17,9 +16,6 @@ trait FongoSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
 
   override protected def beforeAll() = {
     super.beforeAll()
-
-    val mongo = fongo.getMongo
-    MongoDB.defineDb(DefaultMongoIdentifier, mongo, dbName)
   }
 
   override protected def beforeEach() = {
@@ -28,7 +24,7 @@ trait FongoSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   }
 
   override protected def afterAll() = {
-    MongoDB.close
+    fongo.getMongo.close()
     super.afterAll()
   }
 

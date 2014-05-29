@@ -22,7 +22,6 @@ object Dependencies {
 
   private val fongoVersion = "1.5.1"
   val mongodbStack = Seq(
-    "net.liftweb" %% "lift-mongodb-record" % "2.5.1",
     "org.mongodb" % "mongo-java-driver" % "2.12.2",
     "com.github.fakemongo" % "fongo" % fongoVersion % "test",
     "org.mongodb" %% "casbah" % "2.7.2" exclude(org = "org.scala-lang", name = "scala-library")
