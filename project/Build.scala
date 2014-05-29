@@ -1,6 +1,7 @@
 import sbt._
 import sbt.Keys._
 import sbtrelease.ReleasePlugin._
+import com.earldouglas.xsbtwebplugin.WebPlugin
 
 object Dependencies {
 
@@ -38,7 +39,18 @@ object Dependencies {
   val json4s = Seq(
     "org.json4s" %% "json4s-jackson" % json4sVersion
   )
+
   val json4sInProvidedScope = json4s.map(_ % "provided")
+
+  val jettyVersion = "8.1.8.v20121106"
+  val servletApi = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" %
+    "container;provided;test" artifacts Artifact("javax.servlet", "jar", "jar")
+
+  val httpStack = Seq(
+    "org.eclipse.jetty" % "jetty-webapp" % jettyVersion,
+    "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % "container",
+    servletApi
+  ) ++ json4s
 }
 
 object TheGardenBuild extends Build {
@@ -100,7 +112,7 @@ object TheGardenBuild extends Build {
     base = file("mongodb"),
     settings = rootSettings).settings(
       libraryDependencies ++= mongodbStack ++ logging
-    ).settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*)
+    )
 
   lazy val mongodbTest = Project(id = "mongodb-test",
     base = file("mongodb-test"),
@@ -108,8 +120,14 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= mongodbStack ++ logging ++ Seq(scalatestInCompileScope, fongoInCompileScope)
     )
 
+  lazy val web = Project(id = "garden-web",
+    base = file("garden-web"),
+    settings = rootSettings ++ WebPlugin.webSettings).settings(
+      libraryDependencies ++= httpStack
+    )
+
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
-    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest)
+    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, web)
 
 }
