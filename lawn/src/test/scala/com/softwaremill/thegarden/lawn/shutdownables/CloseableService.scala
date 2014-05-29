@@ -1,8 +1,8 @@
 package com.softwaremill.thegarden.lawn.shutdownables
 
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 
-class CloseableService extends Shutdownable with Logging {
+class CloseableService extends Shutdownable with LazyLogging {
 
   def shutdown() = {
     logger.debug("Closing CloseableService.")
