@@ -54,7 +54,7 @@ object TheGardenBuild extends Build {
     scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
-    scalaVersion := "2.10.3",
+    scalaVersion := "2.11.1",
     crossScalaVersions := Seq("2.10.3", "2.11.1"),
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
