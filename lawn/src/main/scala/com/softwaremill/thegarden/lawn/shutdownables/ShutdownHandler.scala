@@ -1,11 +1,11 @@
 package com.softwaremill.thegarden.lawn.shutdownables
 
-import com.typesafe.scalalogging.slf4j.Logging
 import scala.collection.mutable
 
 import scala.language.implicitConversions
+import com.typesafe.scalalogging.slf4j.LazyLogging
 
-class ShutdownHandler extends Logging {
+class ShutdownHandler extends LazyLogging {
 
   private val shutdownableQueue = new mutable.SynchronizedQueue[Shutdownable]()
 

@@ -9,10 +9,10 @@ object Dependencies {
     "org.slf4j" % "slf4j-api" % slf4jVersion,
     "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
     "ch.qos.logback" % "logback-classic" % "1.1.1",
-    "com.typesafe" %% "scalalogging-slf4j" % "1.1.0"
+    "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
   )
 
-  private val scalatestVersion = "2.0"
+  private val scalatestVersion = "2.1.7"
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.2.0",
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
@@ -56,6 +56,7 @@ object TheGardenBuild extends Build {
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
     scalaVersion := "2.10.3",
+    crossScalaVersions := Seq("2.10.3", "2.11.1"),
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
       (v: String) =>
