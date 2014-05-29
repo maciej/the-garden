@@ -124,7 +124,7 @@ object TheGardenBuild extends Build {
     base = file("garden-web"),
     settings = rootSettings ++ WebPlugin.webSettings).settings(
       libraryDependencies ++= httpStack
-    )
+    ) dependsOn(lawn)
 
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
