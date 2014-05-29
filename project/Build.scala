@@ -1,7 +1,6 @@
 import sbt._
 import sbt.Keys._
 import sbtrelease.ReleasePlugin._
-import com.earldouglas.xsbtwebplugin.WebPlugin
 
 object Dependencies {
 
@@ -44,11 +43,10 @@ object Dependencies {
 
   val jettyVersion = "8.1.8.v20121106"
   val servletApi = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" %
-    "container;provided;test" artifacts Artifact("javax.servlet", "jar", "jar")
+    "provided;test" artifacts Artifact("javax.servlet", "jar", "jar")
 
   val httpStack = Seq(
     "org.eclipse.jetty" % "jetty-webapp" % jettyVersion,
-    "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % "container",
     servletApi
   ) ++ json4s
 }
@@ -120,11 +118,12 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= mongodbStack ++ logging ++ Seq(scalatestInCompileScope, fongoInCompileScope)
     )
 
+
   lazy val web = Project(id = "garden-web",
     base = file("garden-web"),
-    settings = rootSettings ++ WebPlugin.webSettings).settings(
+    settings = rootSettings).settings(
       libraryDependencies ++= httpStack
-    ) dependsOn(lawn)
+    ) dependsOn lawn
 
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
