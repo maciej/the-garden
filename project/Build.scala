@@ -1,5 +1,6 @@
 import sbt._
 import sbt.Keys._
+import sbtrelease.ReleasePlugin._
 
 object Dependencies {
 
@@ -54,7 +55,6 @@ object TheGardenBuild extends Build {
     scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
-    version := "0.0.16-SNAPSHOT",
     scalaVersion := "2.10.3",
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
@@ -82,7 +82,7 @@ object TheGardenBuild extends Build {
     licenses := ("Apache2", new java.net.URL("http://www.apache.org/licenses/LICENSE-2.0.txt")) :: Nil,
     homepage := Some(new java.net.URL("http://www.softwaremill.com")),
     libraryDependencies ++= baseDependencies
-  )
+  ) ++ releaseSettings
 
   lazy val lawn = Project(id = "lawn",
     base = file("lawn"),
