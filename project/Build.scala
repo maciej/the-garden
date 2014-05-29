@@ -35,7 +35,7 @@ object Dependencies {
     "org.joda" % "joda-convert" % "1.2"
   )
 
-  val json4sVersion = "3.2.8"
+  val json4sVersion = "3.2.10"
   val json4s = Seq(
     "org.json4s" %% "json4s-jackson" % json4sVersion
   )
