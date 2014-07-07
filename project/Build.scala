@@ -20,6 +20,8 @@ object Dependencies {
   )
   val scalatestInCompileScope = "org.scalatest" %% "scalatest" % scalatestVersion
 
+  val commonsIo = "commons-io" % "commons-io" % "2.4"
+
   private val fongoVersion = "1.5.1"
   val mongodbStack = Seq(
     "org.mongodb" % "mongo-java-driver" % "2.12.2",
@@ -97,7 +99,7 @@ object TheGardenBuild extends Build {
   lazy val lawn = Project(id = "lawn",
     base = file("lawn"),
     settings = rootSettings).settings(
-      libraryDependencies ++= jodaTime ++ logging
+      libraryDependencies ++= jodaTime ++ logging ++ Seq(commonsIo)
     )
 
   lazy val shrubs = Project(id = "shrubs",
