@@ -28,7 +28,7 @@ class ShutdownHandler extends LazyLogging {
   private[shutdownables] def queueLength = shutdownableQueue.length
 }
 
-trait WithShutdownHandler {
+trait ShutdownHandlerModule {
   def shutdownHandler: ShutdownHandler
 
   implicit def anyToShutdownable[T](service: T) = new WrappedServiceToShutdown(service)
@@ -56,13 +56,13 @@ trait WithShutdownHandler {
 
 }
 
-trait DefaultShutdownHandlerModule extends WithShutdownHandler {
+trait DefaultShutdownHandlerModule extends ShutdownHandlerModule {
 
   lazy val shutdownHandler = new ShutdownHandler
 }
 
 trait ShutdownOnJVMTermination {
-  this: WithShutdownHandler =>
+  this: ShutdownHandlerModule =>
 
   sys.addShutdownHook {
     shutdownHandler.shutdown()
