@@ -36,21 +36,39 @@ object Dependencies {
     "org.joda" % "joda-convert" % "1.2"
   )
 
-  val json4sVersion = "3.2.10"
-  val json4s = Seq(
-    "org.json4s" %% "json4s-jackson" % json4sVersion
-  )
+  val akkaVersion = "2.3.4"
+  val akkaActors = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
+  val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
+  val akka = Seq(akkaActors, akkaSlf4j, akkaTestKit)
 
-  val json4sInProvidedScope = json4s.map(_ % "provided")
+  val json4sVersion = "3.2.10"
+  val json4s = "org.json4s" %% "json4s-jackson" % json4sVersion
+  val json4sExt = "org.json4s" %% "json4s-ext" % json4sVersion
+  val json4sSeq = Seq(json4s)
+
+  val json4sInProvidedScope = json4sSeq.map(_ % "provided")
 
   val jettyVersion = "8.1.8.v20121106"
   val servletApi = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" %
     "provided;test" artifacts Artifact("javax.servlet", "jar", "jar")
 
-  val httpStack = Seq(
+  val scalatraStack = Seq(
     "org.eclipse.jetty" % "jetty-webapp" % jettyVersion,
     servletApi
-  ) ++ json4s
+  ) ++ json4sSeq
+
+  val sprayVersion = "1.3.1-20140423"
+  val spray = Seq(
+    "io.spray" %% "spray-routing" % sprayVersion,
+    "io.spray" %% "spray-testkit" % sprayVersion % "test"
+  )
+
+  val sprayStack = Seq(
+    json4s,
+    json4sExt
+  ) ++ spray ++ akka
+
 }
 
 object TheGardenBuild extends Build {
@@ -121,14 +139,20 @@ object TheGardenBuild extends Build {
     )
 
 
-  lazy val web = Project(id = "garden-web",
-    base = file("garden-web"),
+  lazy val gardenScalatra = Project(id = "garden-scalatra",
+    base = file("garden-scalatra"),
     settings = rootSettings).settings(
-      libraryDependencies ++= httpStack
+      libraryDependencies ++= scalatraStack
+    ) dependsOn lawn
+
+  lazy val gardenSpray = Project(id = "garden-spray",
+    base = file("garden-spray"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= sprayStack
     ) dependsOn lawn
 
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
-    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, web)
+    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra, gardenSpray)
 
 }
