@@ -6,6 +6,8 @@ import scala.collection.mutable.ArrayBuffer
 
 class ShutdownHandlerSpec extends FlatSpec with ShouldMatchers {
 
+  behavior of "ShutdownHandler"
+
   it should "shutdown Shutdownables in reverse order" in {
     // Given
     val shutdownOrder = new ArrayBuffer[String]

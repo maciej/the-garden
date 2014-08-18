@@ -4,6 +4,8 @@ import org.scalatest.{ShouldMatchers, FlatSpec}
 
 class ShutdownableSpec extends FlatSpec with ShouldMatchers {
 
+  behavior of "Module with ShutdownHandler"
+
   it should "not have CloseableService registered for closing if it was never referenced" in {
     val module = new ShutdownablesModule
 
@@ -30,4 +32,3 @@ class ShutdownablesModule {
 
   lazy val serviceManager = new ServiceManager(closeableService)
 }
-
