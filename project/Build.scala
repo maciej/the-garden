@@ -58,7 +58,7 @@ object Dependencies {
     servletApi
   ) ++ json4sSeq
 
-  val sprayVersion = "1.3.1-20140423"
+  val sprayVersion = "1.3.1"
   val spray = Seq(
     "io.spray" %% "spray-routing" % sprayVersion,
     "io.spray" %% "spray-testkit" % sprayVersion % "test"
@@ -79,7 +79,7 @@ object TheGardenBuild extends Build {
     name := "the-garden",
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
 
-  lazy val rootSettings: Seq[Setting[_]] = Project.defaultSettings ++ Seq(
+  lazy val rootSettings: Seq[Setting[_]] = Seq(
     scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
     scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
