@@ -151,8 +151,14 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= sprayStack
     ) dependsOn lawn
 
+  lazy val gardenJson4s = Project(id = "garden-json4s",
+    base = file("garden-json4s"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= json4sSeq
+    )
+
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
-    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra, gardenSpray)
+    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra, gardenSpray, gardenJson4s)
 
 }
