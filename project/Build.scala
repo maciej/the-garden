@@ -170,6 +170,7 @@ object TheGardenBuild extends Build {
 
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
-    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra, gardenSpray, gardenJson4s)
+    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
+      gardenSpray, gardenSprayTestkit, gardenJson4s)
 
 }
