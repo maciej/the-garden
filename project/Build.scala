@@ -18,6 +18,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
+
   val scalatestInCompileScope = "org.scalatest" %% "scalatest" % scalatestVersion
 
   val commonsIo = "commons-io" % "commons-io" % "2.4"
@@ -64,10 +65,14 @@ object Dependencies {
     "io.spray" %% "spray-testkit" % sprayVersion % "test"
   )
 
+  val sprayCan = "io.spray" %% "spray-can" % sprayVersion
+
   val sprayStack = Seq(
     json4s,
     json4sExt
   ) ++ spray ++ akka
+
+  def inCompileScope(deps: Seq[ModuleID]): Seq[ModuleID] = deps.map(_.copy(configurations = Some("compile")))
 
 }
 
@@ -149,6 +154,12 @@ object TheGardenBuild extends Build {
     base = file("garden-spray"),
     settings = rootSettings).settings(
       libraryDependencies ++= sprayStack
+    ) dependsOn lawn
+
+  lazy val gardenSprayTestkit = Project(id = "garden-spray-testkit",
+    base = file("garden-spray-testkit"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= sprayStack ++ Seq(scalatestInCompileScope, sprayCan) ++ inCompileScope(akka)
     ) dependsOn lawn
 
   lazy val gardenJson4s = Project(id = "garden-json4s",
