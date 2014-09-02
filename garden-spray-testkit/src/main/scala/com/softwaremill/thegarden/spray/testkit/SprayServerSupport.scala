@@ -10,7 +10,7 @@ trait SprayServerSupport {
 
   this: TestKit =>
 
-  protected val httPort: Int = _
+  protected val httPort: Int
 
   protected def newServer(service: ActorRef) = {
     val commander = TestProbe()
