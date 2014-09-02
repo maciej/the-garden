@@ -10,11 +10,11 @@ trait SprayServerSupport {
 
   this: TestKit =>
 
-  protected val httPort: Int
+  protected val httpPort: Int
 
   protected def newServer(service: ActorRef) = {
     val commander = TestProbe()
-    commander.send(IO(Http), Http.Bind(service, "localhost", httPort))
+    commander.send(IO(Http), Http.Bind(service, "localhost", httpPort))
     commander.expectMsgType[Http.Bound]
     commander.sender()
   }
