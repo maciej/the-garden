@@ -20,7 +20,7 @@ class ShutdownHandlerSpec extends FlatSpec with ShouldMatchers {
       override def shutdown() = shutdownOrder.append("first")
     }
 
-    val manager = new ShutdownHandler
+    val manager = new QueueBackedShutdownHandler
     manager.register(new ShutdownSecond)
     manager.register(new ShutdownFirst)
 

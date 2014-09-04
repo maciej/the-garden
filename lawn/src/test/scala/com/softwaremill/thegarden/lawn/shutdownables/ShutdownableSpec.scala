@@ -26,7 +26,7 @@ class ShutdownableSpec extends FlatSpec with ShouldMatchers {
 
 class ShutdownablesModule {
 
-  lazy val shutdownHandler = new ShutdownHandler
+  lazy val shutdownHandler = new QueueBackedShutdownHandler
 
   lazy val closeableService = new ShutdownableService(shutdownHandler, new CloseableService).service
 

@@ -5,7 +5,14 @@ import scala.collection.mutable
 import scala.language.implicitConversions
 import com.typesafe.scalalogging.slf4j.LazyLogging
 
-class ShutdownHandler extends LazyLogging {
+trait ShutdownHandler {
+  def shutdown() : Unit
+
+  protected[shutdownables] def register(service: Shutdownable) : Unit
+
+}
+
+class QueueBackedShutdownHandler extends ShutdownHandler with LazyLogging {
 
   private val shutdownableQueue = new mutable.SynchronizedQueue[Shutdownable]()
 
@@ -21,11 +28,19 @@ class ShutdownHandler extends LazyLogging {
     }
   }
 
-  private[shutdownables] def register(service: Shutdownable) {
+  override protected[shutdownables] def register(service: Shutdownable) {
     shutdownableQueue.enqueue(service)
   }
 
   private[shutdownables] def queueLength = shutdownableQueue.length
+}
+
+object NullShutdownHandler extends ShutdownHandler {
+
+  override def shutdown() = {}
+
+  override protected[shutdownables] def register(service: Shutdownable) = {}
+
 }
 
 trait ShutdownHandlerModule {
@@ -58,7 +73,11 @@ trait ShutdownHandlerModule {
 
 trait DefaultShutdownHandlerModule extends ShutdownHandlerModule {
 
-  lazy val shutdownHandler = new ShutdownHandler
+  lazy val shutdownHandler = new QueueBackedShutdownHandler
+}
+
+trait NullShutdownHandlerModule extends ShutdownHandlerModule {
+  override def shutdownHandler = NullShutdownHandler
 }
 
 trait ShutdownOnJVMTermination {
