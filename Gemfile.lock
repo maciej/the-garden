@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    simply_useful (0.2.3)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  simply_useful (= 0.2.3)
