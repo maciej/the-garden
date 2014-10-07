@@ -1,5 +1,9 @@
 package com.softwaremill.thegarden.shrubs.net
 
+import java.io.IOException
+import java.net.Socket
+
+
 /**
  * Thread-safe provider of a sequence of integers safe to use as port numbers.
  */
@@ -10,14 +14,31 @@ object TestApplicationPorts {
 
   val BlacklistedPorts = Set(3000, 4000, 8443, 8080)
 
-  def next() : Int = {
+  private def isAvailable(port: Int): Boolean = {
+    var socket: Socket = null
+    try {
+      socket = new Socket("localhost", port)
+      true
+    } catch {
+      case _: IOException => false
+    } finally {
+      if (socket != null)
+        try {
+          socket.close()
+        } catch {
+          case _: IOException => false
+        }
+    }
+  }
+
+  def next(): Int = {
     synchronized {
       portNumber += 1
 
       if (portNumber >= math.pow(2, 16).toInt - 1)
         throw new RuntimeException("Whoops! Too many tests? To many applications started?")
 
-      while (BlacklistedPorts(portNumber)) {
+      while (BlacklistedPorts(portNumber) || !isAvailable(portNumber)) {
         portNumber += 1
       }
 

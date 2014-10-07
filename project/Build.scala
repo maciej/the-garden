@@ -129,7 +129,7 @@ object TheGardenBuild extends Build {
     base = file("shrubs"),
     settings = rootSettings).settings(
       libraryDependencies ++= Seq(scalatestInCompileScope) ++ jodaTime ++ json4sInProvidedScope
-    )
+    ) dependsOn lawn
 
   lazy val mongodb = Project(id = "mongodb",
     base = file("mongodb"),
