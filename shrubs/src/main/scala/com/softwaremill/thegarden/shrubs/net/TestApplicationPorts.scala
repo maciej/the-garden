@@ -26,7 +26,7 @@ object TestApplicationPorts {
         try {
           socket.close()
         } catch {
-          case _: IOException => false
+          case _: IOException => ()
         }
     }
   }
