@@ -1,7 +1,7 @@
 package com.softwaremill.thegarden.shrubs.net
 
 import java.io.IOException
-import java.net.Socket
+import java.net.ServerSocket
 
 
 /**
@@ -15,9 +15,9 @@ object TestApplicationPorts {
   val BlacklistedPorts = Set(3000, 4000, 8443, 8080)
 
   private def isAvailable(port: Int): Boolean = {
-    var socket: Socket = null
+    var socket: ServerSocket = null
     try {
-      socket = new Socket("localhost", port)
+      socket = new ServerSocket(port)
       true
     } catch {
       case _: IOException => false
