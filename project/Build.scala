@@ -168,9 +168,15 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= json4sSeq
     )
 
+  lazy val gardenAkka = Project(id = "garden-akka",
+    base = file("garden-akka"),
+    settings = rootSettings).settings(
+      libraryDependencies ++= akka
+    ) dependsOn lawn
+
   lazy val theGarden = Project(id = "the-garden",
     base = file(""),
     settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
-      gardenSpray, gardenSprayTestkit, gardenJson4s)
+      gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka)
 
 }
