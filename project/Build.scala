@@ -23,7 +23,7 @@ object Dependencies {
 
   val commonsIo = "commons-io" % "commons-io" % "2.4"
 
-  private val fongoVersion = "1.5.1"
+  private val fongoVersion = "1.5.7"
   val mongodbStack = Seq(
     "org.mongodb" % "mongo-java-driver" % "2.12.2",
     "com.github.fakemongo" % "fongo" % fongoVersion % "test",
