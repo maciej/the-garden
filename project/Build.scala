@@ -82,7 +82,9 @@ object TheGardenBuild extends Build {
 
   override val settings = super.settings ++ Seq(
     name := "the-garden",
-    isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"))
+    isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"),
+    ReleaseKeys.crossBuild := true
+  )
 
   lazy val rootSettings: Seq[Setting[_]] = Seq(
     scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
