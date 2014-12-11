@@ -43,7 +43,7 @@ object Dependencies {
   val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
   val akka = Seq(akkaActors, akkaSlf4j, akkaTestKit)
 
-  val json4sVersion = "3.2.10"
+  val json4sVersion = "3.2.11"
   val json4s = "org.json4s" %% "json4s-jackson" % json4sVersion
   val json4sExt = "org.json4s" %% "json4s-ext" % json4sVersion
   val json4sSeq = Seq(json4s)
