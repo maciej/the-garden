@@ -3,7 +3,7 @@ package com.softwaremill.thegarden.lawn.shutdownables
 import scala.collection.mutable
 
 import scala.language.implicitConversions
-import com.typesafe.scalalogging.slf4j.LazyLogging
+import com.typesafe.scalalogging.LazyLogging
 
 trait ShutdownHandler {
   def shutdown() : Unit

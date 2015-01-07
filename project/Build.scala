@@ -9,7 +9,7 @@ object Dependencies {
     "org.slf4j" % "slf4j-api" % slf4jVersion,
     "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
     "ch.qos.logback" % "logback-classic" % "1.1.1",
-    "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
   )
 
   private val scalatestVersion = "2.2.2"
