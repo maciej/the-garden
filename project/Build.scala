@@ -4,7 +4,7 @@ import sbtrelease.ReleasePlugin._
 
 object Dependencies {
 
-  private val slf4jVersion = "1.7.6"
+  private val slf4jVersion = "1.7.10"
   val logging = Seq(
     "org.slf4j" % "slf4j-api" % slf4jVersion,
     "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
@@ -12,7 +12,7 @@ object Dependencies {
     "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
   )
 
-  private val scalatestVersion = "2.1.7"
+  private val scalatestVersion = "2.2.2"
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.2.0",
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
@@ -40,7 +40,7 @@ object Dependencies {
     "org.joda" % "joda-convert" % "1.2"
   )
 
-  val akkaVersion = "2.3.4"
+  val akkaVersion = "2.3.8"
   val akkaActors = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
   val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
@@ -62,7 +62,7 @@ object Dependencies {
     servletApi
   ) ++ json4sSeq
 
-  val sprayVersion = "1.3.1"
+  val sprayVersion = "1.3.2"
   val spray = Seq(
     "io.spray" %% "spray-routing" % sprayVersion,
     "io.spray" %% "spray-testkit" % sprayVersion % "test"
