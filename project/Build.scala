@@ -19,7 +19,10 @@ object Dependencies {
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
 
-  val scalatestInCompileScope = "org.scalatest" %% "scalatest" % scalatestVersion
+  val scalatestForTestingModules = Seq(
+    "org.scalatest" %% "scalatest" % scalatestVersion % "provided",
+    "org.scalatest" %% "scalatest" % scalatestVersion % "test"
+  )
 
   val commonsIo = "commons-io" % "commons-io" % "2.4"
 
@@ -130,7 +133,7 @@ object TheGardenBuild extends Build {
   lazy val shrubs = Project(id = "shrubs",
     base = file("shrubs"),
     settings = rootSettings).settings(
-      libraryDependencies ++= Seq(scalatestInCompileScope) ++ jodaTime ++ json4sInProvidedScope
+      libraryDependencies ++= scalatestForTestingModules ++ jodaTime ++ json4sInProvidedScope
     ) dependsOn lawn
 
   lazy val mongodb = Project(id = "mongodb",
@@ -142,7 +145,7 @@ object TheGardenBuild extends Build {
   lazy val mongodbTest = Project(id = "mongodb-test",
     base = file("mongodb-test"),
     settings = rootSettings).settings(
-      libraryDependencies ++= mongodbStack ++ logging ++ Seq(scalatestInCompileScope, fongoInCompileScope)
+      libraryDependencies ++= mongodbStack ++ logging ++ scalatestForTestingModules ++ Seq(fongoInCompileScope)
     )
 
 
@@ -161,7 +164,7 @@ object TheGardenBuild extends Build {
   lazy val gardenSprayTestkit = Project(id = "garden-spray-testkit",
     base = file("garden-spray-testkit"),
     settings = rootSettings).settings(
-      libraryDependencies ++= sprayStack ++ Seq(scalatestInCompileScope, sprayCan) ++ inCompileScope(akka)
+      libraryDependencies ++= sprayStack ++ scalatestForTestingModules ++ Seq(sprayCan) ++ inCompileScope(akka)
     ) dependsOn lawn
 
   lazy val gardenJson4s = Project(id = "garden-json4s",
