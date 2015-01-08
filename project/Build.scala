@@ -25,6 +25,7 @@ object Dependencies {
   )
 
   val commonsIo = "commons-io" % "commons-io" % "2.4"
+  // https://code.google.com/p/concurrentlinkedhashmap/
   val concurrentLinkedHashMap = "com.googlecode.concurrentlinkedhashmap" % "concurrentlinkedhashmap-lru" % "1.4.1"
 
   private val fongoVersion = "1.5.7"
