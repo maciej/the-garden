@@ -25,6 +25,7 @@ object Dependencies {
   )
 
   val commonsIo = "commons-io" % "commons-io" % "2.4"
+  val concurrentLinkedHashMap = "com.googlecode.concurrentlinkedhashmap" % "concurrentlinkedhashmap-lru" % "1.4.1"
 
   private val fongoVersion = "1.5.7"
   val mongodbStack = Seq(
@@ -127,7 +128,7 @@ object TheGardenBuild extends Build {
   lazy val lawn = Project(id = "lawn",
     base = file("lawn"),
     settings = rootSettings).settings(
-      libraryDependencies ++= jodaTime ++ logging ++ Seq(commonsIo)
+      libraryDependencies ++= jodaTime ++ logging ++ Seq(commonsIo, concurrentLinkedHashMap)
     )
 
   lazy val shrubs = Project(id = "shrubs",
