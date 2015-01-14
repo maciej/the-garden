@@ -100,7 +100,6 @@ object TheGardenBuild extends Build {
     Keys.scalaVersion := scalaVersion,
     organization := "com.softwaremill.thegarden",
     ReleaseKeys.crossBuild := false,
-    crossVersion := CrossVersion.Disabled,
     crossScalaVersions := Seq(scalaVersion),
     publishTo <<= version {
       (v: String) =>
