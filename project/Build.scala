@@ -90,15 +90,18 @@ object TheGardenBuild extends Build {
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
 
+  val scalaVersion = "2.11.4"
+
   lazy val rootSettings: Seq[Setting[_]] = Seq(
     scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
     scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8") ,
-    scalaVersion := "2.11.4",
+    Keys.scalaVersion := scalaVersion,
     organization := "com.softwaremill.thegarden",
     ReleaseKeys.crossBuild := false,
     crossVersion := CrossVersion.Disabled,
+    crossScalaVersions := Seq(scalaVersion),
     publishTo <<= version {
       (v: String) =>
         val nexus = "https://nexus.softwaremill.com/"
