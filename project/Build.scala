@@ -88,7 +88,7 @@ object TheGardenBuild extends Build {
   override val settings = super.settings ++ Seq(
     name := "the-garden",
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"),
-    ReleaseKeys.crossBuild := true
+    ReleaseKeys.crossBuild := false
   )
 
   lazy val rootSettings: Seq[Setting[_]] = Seq(
@@ -97,7 +97,7 @@ object TheGardenBuild extends Build {
     // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
     javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8") ,
     scalaVersion := "2.11.4",
-    crossScalaVersions := Seq("2.10.4", "2.11.4"),
+//    crossScalaVersions := Seq("2.10.4", "2.11.4"),
     organization := "com.softwaremill.thegarden",
     publishTo <<= version {
       (v: String) =>
