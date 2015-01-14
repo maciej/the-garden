@@ -97,6 +97,8 @@ object TheGardenBuild extends Build {
     javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8") ,
     scalaVersion := "2.11.4",
     organization := "com.softwaremill.thegarden",
+    ReleaseKeys.crossBuild := false,
+    crossVersion := CrossVersion.Disabled,
     publishTo <<= version {
       (v: String) =>
         val nexus = "https://nexus.softwaremill.com/"
