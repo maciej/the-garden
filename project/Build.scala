@@ -87,8 +87,7 @@ object TheGardenBuild extends Build {
 
   override val settings = super.settings ++ Seq(
     name := "the-garden",
-    isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT"),
-    ReleaseKeys.crossBuild := false
+    isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
 
   lazy val rootSettings: Seq[Setting[_]] = Seq(
