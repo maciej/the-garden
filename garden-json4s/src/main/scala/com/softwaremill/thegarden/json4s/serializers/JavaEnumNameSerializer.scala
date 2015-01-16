@@ -4,6 +4,7 @@ import org.json4s._
 
 import scala.reflect.ClassTag
 
+// TODO convert implicit param to a context bound
 class JavaEnumNameSerializer[T <: Enum[T]](implicit ct: ClassTag[T]) extends Serializer[T] {
 
   import JsonDSL._
