@@ -3,8 +3,6 @@ package com.softwaremill.thegarden.json4s.serializers
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatest.{FlatSpec, Matchers}
 
-private[serializers] case class BlogPost(postId: Int, text: String)
-
 class UnderscorizeFieldNamesSerializerSpec extends FlatSpec with Matchers {
 
   implicit private val formats: Formats = new DefaultFormats {} + UnderscorizeFieldNamesSerializer
@@ -16,9 +14,10 @@ class UnderscorizeFieldNamesSerializerSpec extends FlatSpec with Matchers {
 
     val serialized = write(post)
 
+    println(serialized)
+
     serialized should not include "postId"
     serialized should include("post_id")
   }
 
 }
-
