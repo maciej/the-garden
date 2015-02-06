@@ -66,7 +66,7 @@ object Dependencies {
 
   val sprayVersion = "1.3.2"
   val spray = Seq(
-    "io.spray" %% "spray-routing" % sprayVersion,
+    "io.spray" %% "spray-routing-shapeless2" % sprayVersion,
     "io.spray" %% "spray-testkit" % sprayVersion % "test"
   )
 
