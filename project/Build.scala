@@ -90,7 +90,7 @@ object TheGardenBuild extends Build {
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
 
-  val scalaVersion = "2.11.4"
+  val scalaVersion = "2.11.5"
 
   lazy val rootSettings: Seq[Setting[_]] = Seq(
     scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
