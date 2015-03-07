@@ -38,8 +38,8 @@ object Dependencies {
   val fongoInCompileScope = "com.github.fakemongo" % "fongo" % fongoVersion
 
   val jodaTime = Seq(
-    "joda-time" % "joda-time" % "2.1",
-    "org.joda" % "joda-convert" % "1.2"
+    "joda-time" % "joda-time" % "2.7",
+    "org.joda" % "joda-convert" % "1.7"
   )
 
   val akkaVersion = "2.3.8"
