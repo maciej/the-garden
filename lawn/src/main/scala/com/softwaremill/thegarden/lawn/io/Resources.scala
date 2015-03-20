@@ -17,4 +17,7 @@ object Resources {
   def readToString(path: String) =
     IOUtils.toString(inputStream(path), "UTF-8")
 
+  def toFile(path: String) =
+    this.getClass.getClassLoader.getResource(path).getFile
+
 }
