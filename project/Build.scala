@@ -1,6 +1,9 @@
+import com.typesafe.sbt.GitVersioning
+import com.typesafe.sbt.SbtGit.git
 import sbt._
 import sbt.Keys._
 import sbtrelease.ReleasePlugin._
+import bintray.Plugin._
 
 object Dependencies {
 
@@ -86,36 +89,25 @@ object TheGardenBuild extends Build {
   import Dependencies._
 
   override val settings = super.settings ++ Seq(
+    organization := "me.maciej.garden",
     name := "the-garden",
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
 
   val scalaVersion = "2.11.6"
 
-  lazy val rootSettings: Seq[Setting[_]] = Seq(
-    scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
-    scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
-    // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
-    javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8") ,
-    Keys.scalaVersion := scalaVersion,
-    organization := "com.softwaremill.thegarden",
-    ReleaseKeys.crossBuild := false,
-    crossScalaVersions := Seq(scalaVersion),
-    publishTo <<= version {
-      (v: String) =>
-        val nexus = "https://nexus.softwaremill.com/"
-        if (v.trim.endsWith("SNAPSHOT"))
-          Some("snapshots" at nexus + "content/repositories/snapshots")
-        else
-          Some("releases" at nexus + "content/repositories/releases")
-    },
-    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+  // Reading material
+  // http://www.scala-sbt.org/0.13/docs/Combined+Pages.html#Define+the+repository
+  // http://www.jfrog.com/confluence/pages/viewpage.action?pageId=26083425#DeployingMavenandGradlesnapshotstoOJO%28oss.jfrog.org%29-onboard
+
+  // No JFrog OSS repository yet
+  //    publishTo := Some("Artifactory Realm" at "http://oss.jfrog.org/artifactory/oss-snapshot-local"),
+  //    credentials := Credentials(Path.userHome / ".bintray" / ".artifactory") :: Nil
+
+  val publishingSettings: Seq[Setting[_]] = bintrayPublishSettings ++ Seq(
     publishMavenStyle := true,
     publishArtifact in Test := false,
-    pomExtra := <scm>
-      <url>git@github.com:maciej/the-garden.git</url>
-      <connection>scm:git:git@github.com:maciej/the-garden.git</connection>
-    </scm>
+    pomExtra :=
       <developers>
         <developer>
           <id>maciej</id>
@@ -123,67 +115,89 @@ object TheGardenBuild extends Build {
           <url>http://twitter.com/maciejb</url>
         </developer>
       </developers>,
-    licenses := ("Apache2", new java.net.URL("http://www.apache.org/licenses/LICENSE-2.0.txt")) :: Nil,
-    homepage := Some(new java.net.URL("http://www.softwaremill.com")),
+    licenses := ("Apache-2.0", new java.net.URL("http://www.apache.org/licenses/LICENSE-2.0.txt")) :: Nil,
+    homepage := Some(new java.net.URL("http://maciejb.me")),
+    bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("maciej"),
+    git.useGitDescribe := true
+  )
+
+  lazy val rootSettings: Seq[Setting[_]] = Seq(
+    scalacOptions in GlobalScope in Compile := Seq("-unchecked", "-deprecation", "-feature"),
+    scalacOptions in GlobalScope in Test := Seq("-unchecked", "-deprecation", "-feature"),
+    // http://stackoverflow.com/questions/21435023/how-to-change-jdk-set-by-sbt-import-in-intellij-idea
+    javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8"),
+    Keys.scalaVersion := scalaVersion,
+    ReleaseKeys.crossBuild := false,
+    crossScalaVersions := Seq(scalaVersion),
     libraryDependencies ++= baseDependencies
   ) ++ releaseSettings
 
-  lazy val lawn = Project(id = "lawn",
+  def GardenProject(id: String, base: File,
+                    aggregate: => Seq[ProjectReference] = Nil,
+                    dependencies: => Seq[ClasspathDep[ProjectReference]] = Nil,
+                    delegates: => Seq[ProjectReference] = Nil,
+                    settings: => Seq[Def.Setting[_]] = Nil,
+                    configurations: Seq[Configuration] = Nil,
+                    auto: AddSettings = AddSettings.allDefaults) =
+    Project(id, base, aggregate, dependencies, delegates, settings, configurations, auto).
+      enablePlugins(GitVersioning)
+
+  lazy val lawn = GardenProject(id = "garden-lawn",
     base = file("lawn"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= jodaTime ++ logging ++ Seq(commonsIo, concurrentLinkedHashMap)
     )
 
-  lazy val shrubs = Project(id = "shrubs",
+  lazy val shrubs = GardenProject(id = "garden-shrubs",
     base = file("shrubs"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= scalatestForTestingModules ++ jodaTime ++ json4sInProvidedScope
     ) dependsOn lawn
 
-  lazy val mongodb = Project(id = "mongodb",
+  lazy val mongodb = GardenProject(id = "garden-mongodb",
     base = file("mongodb"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= mongodbStack ++ logging
     )
 
-  lazy val mongodbTest = Project(id = "mongodb-test",
+  lazy val mongodbTest = GardenProject(id = "garden-mongodb-test",
     base = file("mongodb-test"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= mongodbStack ++ logging ++ scalatestForTestingModules ++ Seq(fongoInCompileScope)
     )
 
 
-  lazy val gardenScalatra = Project(id = "garden-scalatra",
+  lazy val gardenScalatra = GardenProject(id = "garden-scalatra",
     base = file("garden-scalatra"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= scalatraStack
     ) dependsOn lawn
 
-  lazy val gardenSpray = Project(id = "garden-spray",
+  lazy val gardenSpray = GardenProject(id = "garden-spray",
     base = file("garden-spray"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= sprayStack
     ) dependsOn lawn
 
-  lazy val gardenSprayTestkit = Project(id = "garden-spray-testkit",
+  lazy val gardenSprayTestkit = GardenProject(id = "garden-spray-testkit",
     base = file("garden-spray-testkit"),
     settings = rootSettings).settings(
       libraryDependencies ++= sprayStack ++ scalatestForTestingModules ++ Seq(sprayCan) ++ inCompileScope(akka)
     ) dependsOn lawn
 
-  lazy val gardenJson4s = Project(id = "garden-json4s",
+  lazy val gardenJson4s = GardenProject(id = "garden-json4s",
     base = file("garden-json4s"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= json4sSeq
     )
 
-  lazy val gardenAkka = Project(id = "garden-akka",
+  lazy val gardenAkka = GardenProject(id = "garden-akka",
     base = file("garden-akka"),
-    settings = rootSettings).settings(
+    settings = rootSettings ++ publishingSettings).settings(
       libraryDependencies ++= akka
     ) dependsOn lawn
 
-  lazy val theGarden = Project(id = "the-garden",
+  lazy val theGarden = GardenProject(id = "the-garden",
     base = file(""),
     settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
       gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka)
