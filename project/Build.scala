@@ -139,8 +139,7 @@ object TheGardenBuild extends Build {
                     settings: => Seq[Def.Setting[_]] = rootSettings ++ publishingSettings,
                     configurations: Seq[Configuration] = Nil,
                     auto: AddSettings = AddSettings.allDefaults) =
-    Project(id, base, aggregate, dependencies, delegates, settings, configurations, auto).
-      enablePlugins(GitVersioning)
+    Project(id, base, aggregate, dependencies, delegates, settings, configurations, auto)
 
   lazy val lawn = GardenProject(id = "garden-lawn",
     base = file("lawn")).settings(
