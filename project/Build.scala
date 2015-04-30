@@ -136,70 +136,60 @@ object TheGardenBuild extends Build {
                     aggregate: => Seq[ProjectReference] = Nil,
                     dependencies: => Seq[ClasspathDep[ProjectReference]] = Nil,
                     delegates: => Seq[ProjectReference] = Nil,
-                    settings: => Seq[Def.Setting[_]] = Nil,
+                    settings: => Seq[Def.Setting[_]] = rootSettings ++ publishingSettings,
                     configurations: Seq[Configuration] = Nil,
                     auto: AddSettings = AddSettings.allDefaults) =
     Project(id, base, aggregate, dependencies, delegates, settings, configurations, auto).
       enablePlugins(GitVersioning)
 
   lazy val lawn = GardenProject(id = "garden-lawn",
-    base = file("lawn"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("lawn")).settings(
       libraryDependencies ++= jodaTime ++ logging ++ Seq(commonsIo, concurrentLinkedHashMap)
     )
 
   lazy val shrubs = GardenProject(id = "garden-shrubs",
-    base = file("shrubs"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("shrubs")).settings(
       libraryDependencies ++= scalatestForTestingModules ++ jodaTime ++ json4sInProvidedScope
     ) dependsOn lawn
 
   lazy val mongodb = GardenProject(id = "garden-mongodb",
-    base = file("mongodb"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("mongodb")).settings(
       libraryDependencies ++= mongodbStack ++ logging
     )
 
   lazy val mongodbTest = GardenProject(id = "garden-mongodb-test",
-    base = file("mongodb-test"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("mongodb-test")).settings(
       libraryDependencies ++= mongodbStack ++ logging ++ scalatestForTestingModules ++ Seq(fongoInCompileScope)
     )
 
 
   lazy val gardenScalatra = GardenProject(id = "garden-scalatra",
-    base = file("garden-scalatra"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("garden-scalatra")).settings(
       libraryDependencies ++= scalatraStack
     ) dependsOn lawn
 
   lazy val gardenSpray = GardenProject(id = "garden-spray",
-    base = file("garden-spray"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("garden-spray")).settings(
       libraryDependencies ++= sprayStack
     ) dependsOn lawn
 
   lazy val gardenSprayTestkit = GardenProject(id = "garden-spray-testkit",
-    base = file("garden-spray-testkit"),
-    settings = rootSettings).settings(
+    base = file("garden-spray-testkit")).settings(
       libraryDependencies ++= sprayStack ++ scalatestForTestingModules ++ Seq(sprayCan) ++ inCompileScope(akka)
     ) dependsOn lawn
 
   lazy val gardenJson4s = GardenProject(id = "garden-json4s",
-    base = file("garden-json4s"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("garden-json4s")).settings(
       libraryDependencies ++= json4sSeq
     )
 
   lazy val gardenAkka = GardenProject(id = "garden-akka",
-    base = file("garden-akka"),
-    settings = rootSettings ++ publishingSettings).settings(
+    base = file("garden-akka")).settings(
       libraryDependencies ++= akka
     ) dependsOn lawn
 
   lazy val theGarden = GardenProject(id = "the-garden",
-    base = file(""),
-    settings = rootSettings).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
+    base = file("")).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
       gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka)
 
 }
