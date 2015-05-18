@@ -89,7 +89,7 @@ object TheGardenBuild extends Build {
   import Dependencies._
 
   override val settings = super.settings ++ Seq(
-    organization := "me.maciej.garden",
+    organization := "me.maciejb.garden",
     name := "the-garden",
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
