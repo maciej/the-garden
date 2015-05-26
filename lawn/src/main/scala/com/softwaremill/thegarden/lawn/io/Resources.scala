@@ -1,5 +1,7 @@
 package com.softwaremill.thegarden.lawn.io
 
+import java.util.zip.GZIPInputStream
+
 import org.apache.commons.io.IOUtils
 
 object Resources {
@@ -16,6 +18,9 @@ object Resources {
 
   def readToString(path: String) =
     IOUtils.toString(inputStream(path), "UTF-8")
+
+  def toStringUngzipping(resourcePath: String) =
+    IOUtils.toString(new GZIPInputStream(inputStream(resourcePath)))
 
   def toFile(path: String) =
     this.getClass.getClassLoader.getResource(path).getFile
