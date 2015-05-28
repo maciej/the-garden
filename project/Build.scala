@@ -151,16 +151,18 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= scalatestForTestingModules ++ jodaTime ++ json4sInProvidedScope
     ) dependsOn lawn
 
-  lazy val mongodb = GardenProject(id = "garden-mongodb",
+  lazy val gardenMongodb = GardenProject(id = "garden-mongodb",
     base = file("mongodb")).settings(
       libraryDependencies ++= mongodbStack ++ logging
     )
 
-  lazy val mongodbTest = GardenProject(id = "garden-mongodb-test",
+  lazy val gardenMongodbTest = GardenProject(id = "garden-mongodb-test",
     base = file("mongodb-test")).settings(
       libraryDependencies ++= mongodbStack ++ logging ++ scalatestForTestingModules ++ Seq(fongoInCompileScope)
     )
 
+  lazy val gardenNgrok = GardenProject(id = "garden-ngrok",
+    base = file("ngrok")).settings(/* Currently empty */)
 
   lazy val gardenScalatra = GardenProject(id = "garden-scalatra",
     base = file("garden-scalatra")).settings(
@@ -188,7 +190,7 @@ object TheGardenBuild extends Build {
     ) dependsOn lawn
 
   lazy val theGarden = GardenProject(id = "the-garden",
-    base = file("")).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
+    base = file("")).aggregate(lawn, shrubs, gardenNgrok, gardenMongodb, gardenMongodbTest, gardenScalatra,
       gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka)
 
 }
