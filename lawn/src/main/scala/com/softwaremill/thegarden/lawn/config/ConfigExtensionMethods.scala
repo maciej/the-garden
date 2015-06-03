@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit
 import com.typesafe.config.{ConfigFactory, Config}
 
 import scala.concurrent.duration.Duration
+import scala.language.implicitConversions
 
 
 /**
@@ -65,4 +66,8 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
   def getStringOpt(path: String) = Option(getStringOr(path))
   def getPropertiesOpt(path: String) = Option(getPropertiesOr(path))
   def getDurationOpt(path: String) = Option(getDurationOr(path))
+}
+
+object ConfigExtensionMethods {
+  @inline implicit def configExtensionMethods(c: Config): ConfigExtensionMethods = new ConfigExtensionMethods(c)
 }
