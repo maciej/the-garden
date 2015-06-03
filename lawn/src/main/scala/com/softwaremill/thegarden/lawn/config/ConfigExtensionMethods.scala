@@ -37,7 +37,7 @@ import scala.concurrent.duration.Duration
 
 /**
  * Extension methods to make Typesafe Config easier to use.
- * Copied from Slick
+ * Inspired by Slick.
  */
 class ConfigExtensionMethods(val c: Config) extends AnyVal {
 
@@ -64,4 +64,5 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
   def getIntOpt(path: String): Option[Int] = if (c.hasPath(path)) Some(c.getInt(path)) else None
   def getStringOpt(path: String) = Option(getStringOr(path))
   def getPropertiesOpt(path: String) = Option(getPropertiesOr(path))
+  def getDurationOpt(path: String) = Option(getDurationOr(path))
 }
