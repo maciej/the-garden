@@ -27,18 +27,20 @@
  */
 package com.softwaremill.thegarden.lawn.config
 
+import java.time.Duration
+
 import java.util.Properties
-import java.util.concurrent.TimeUnit
 
 import com.typesafe.config.{ConfigFactory, Config}
 
-import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
 
 
 /**
  * Extension methods to make Typesafe Config easier to use.
- * Inspired by Slick.
+ * Inspired by the same class in Slick.
+ * Differences between Slick's version include:
+ * - using [[java.time.Duration]] instead of [[scala.concurrent.duration.Duration]] to match typesafe-config 1.3.0 API.
  */
 class ConfigExtensionMethods(val c: Config) extends AnyVal {
 
@@ -47,11 +49,11 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
   def getBooleanOr(path: String, default: => Boolean = false) = if (c.hasPath(path)) c.getBoolean(path) else default
   def getIntOr(path: String, default: => Int = 0) = if (c.hasPath(path)) c.getInt(path) else default
   def getStringOr(path: String, default: => String = null) = if (c.hasPath(path)) c.getString(path) else default
-  def getConfigOr(path: String, default: => Config = ConfigFactory.empty()) = if (c.hasPath(path)) c.getConfig(path) else default
+  def getConfigOr(path: String, default: => Config = ConfigFactory.empty()) =
+    if (c.hasPath(path)) c.getConfig(path) else default
 
-  def getMillisecondsOr(path: String, default: => Long = 0L) = if (c.hasPath(path)) c.getDuration(path, TimeUnit.MILLISECONDS) else default
-  def getDurationOr(path: String, default: => Duration = Duration.Zero) =
-    if (c.hasPath(path)) Duration(c.getDuration(path, TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS) else default
+  def getDurationOr(path: String, default: => Duration = Duration.ZERO) =
+    if (c.hasPath(path)) c.getDuration(path) else default
 
   def getPropertiesOr(path: String, default: => Properties = null) =
     if (!c.hasPath(path)) default
@@ -65,7 +67,8 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
   def getIntOpt(path: String): Option[Int] = if (c.hasPath(path)) Some(c.getInt(path)) else None
   def getStringOpt(path: String) = Option(getStringOr(path))
   def getPropertiesOpt(path: String) = Option(getPropertiesOr(path))
-  def getDurationOpt(path: String) = Option(getDurationOr(path))
+  def getDurationOpt(path: String) = if (c.hasPath(path)) Some(getDurationOr(path)) else None
+
 }
 
 object ConfigExtensionMethods {

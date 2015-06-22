@@ -17,7 +17,7 @@ object Dependencies {
 
   private val scalatestVersion = "2.2.2"
   val baseDependencies = Seq(
-    "com.typesafe" % "config" % "1.2.0",
+    "com.typesafe" % "config" % "1.3.0",
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
