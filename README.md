@@ -1,9 +1,12 @@
 The Garden
 ==========
 
+[![Build Status](https://travis-ci.org/maciej/the-garden.svg)](https://travis-ci.org/maciej/the-garden)
+
 Various common code and utilities.
 
 Published to `https://dl.bintray.com/maciej/maven`.
+
 
 Shutdownables
 ------------------------
