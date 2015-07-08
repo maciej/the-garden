@@ -1,9 +1,8 @@
-import com.typesafe.sbt.GitVersioning
-import com.typesafe.sbt.SbtGit.git
-import sbt._
-import sbt.Keys._
-import sbtrelease.ReleasePlugin._
 import bintray.Plugin._
+import com.typesafe.sbt.SbtGit.git
+import sbt.Keys._
+import sbt._
+import sbtrelease.ReleasePlugin._
 
 object Dependencies {
 
