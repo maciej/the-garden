@@ -48,6 +48,7 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
 
   def getBooleanOr(path: String, default: => Boolean = false) = if (c.hasPath(path)) c.getBoolean(path) else default
   def getIntOr(path: String, default: => Int = 0) = if (c.hasPath(path)) c.getInt(path) else default
+  def getLongOr(path: String, default: => Long = 0L) = if (c.hasPath(path)) c.getLong(path) else default
   def getStringOr(path: String, default: => String = null) = if (c.hasPath(path)) c.getString(path) else default
   def getConfigOr(path: String, default: => Config = ConfigFactory.empty()) =
     if (c.hasPath(path)) c.getConfig(path) else default
@@ -65,6 +66,7 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
 
   def getBooleanOpt(path: String): Option[Boolean] = if (c.hasPath(path)) Some(c.getBoolean(path)) else None
   def getIntOpt(path: String): Option[Int] = if (c.hasPath(path)) Some(c.getInt(path)) else None
+  def getLongOpt(path: String): Option[Long] = if (c.hasPath(path)) Some(c.getLong(path)) else None
   def getStringOpt(path: String) = Option(getStringOr(path))
   def getPropertiesOpt(path: String) = Option(getPropertiesOr(path))
   def getDurationOpt(path: String) = if (c.hasPath(path)) Some(getDurationOr(path)) else None
