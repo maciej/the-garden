@@ -21,6 +21,21 @@ object StringExtensions {
         str
       }
     }
+
+    def underscore: String = {
+      val spacesPattern = "[-\\s]".r
+      val firstPattern = "([A-Z]+)([A-Z][a-z])".r
+      val secondPattern = "([a-z\\d])([A-Z])".r
+      val replacementPattern = "$1_$2"
+      spacesPattern.replaceAllIn(
+        secondPattern.replaceAllIn(
+          firstPattern.replaceAllIn(
+            str, replacementPattern), replacementPattern), "_").toLowerCase
+    }
+
+    def camelCase: String = "_([a-z\\d])".r.replaceAllIn(str, { m =>
+      m.group(1).toUpperCase
+    })
   }
 
 }

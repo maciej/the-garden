@@ -179,7 +179,7 @@ object TheGardenBuild extends Build {
   lazy val gardenJson4s = GardenProject(id = "garden-json4s",
     base = file("garden-json4s")).settings(
       libraryDependencies ++= json4sSeq
-    )
+    ) dependsOn lawn
 
   lazy val gardenAkka = GardenProject(id = "garden-akka",
     base = file("garden-akka")).settings(
