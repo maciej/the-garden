@@ -6,7 +6,7 @@ import sbtrelease.ReleasePlugin._
 
 object Dependencies {
 
-  private val slf4jVersion = "1.7.10"
+  private val slf4jVersion = "1.7.12"
   val logging = Seq(
     "org.slf4j" % "slf4j-api" % slf4jVersion,
     "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
@@ -14,7 +14,7 @@ object Dependencies {
     "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
   )
 
-  private val scalatestVersion = "2.2.2"
+  private val scalatestVersion = "2.2.4"
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.3.0",
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
@@ -44,13 +44,13 @@ object Dependencies {
     "org.joda" % "joda-convert" % "1.7"
   )
 
-  val akkaVersion = "2.3.8"
+  val akkaVersion = "2.3.11"
   val akkaActors = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
   val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
   val akka = Seq(akkaActors, akkaSlf4j, akkaTestKit)
 
-  val json4sVersion = "3.3.0.RC2"
+  val json4sVersion = "3.3.0.RC3"
   val json4s = "org.json4s" %% "json4s-jackson" % json4sVersion
   val json4sExt = "org.json4s" %% "json4s-ext" % json4sVersion
   val json4sSeq = Seq(json4s)
@@ -93,7 +93,7 @@ object TheGardenBuild extends Build {
     isSnapshot <<= isSnapshot or version(_ endsWith "-SNAPSHOT")
   )
 
-  val scalaVersion = "2.11.6"
+  val scalaVersion = "2.11.7"
 
   // Reading material
   // http://www.scala-sbt.org/0.13/docs/Combined+Pages.html#Define+the+repository
