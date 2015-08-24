@@ -41,6 +41,7 @@ trait InstrumentedBuilder extends nl.grons.metrics.scala.InstrumentedBuilder {
   override protected lazy val metricBuilder =
     new MetricBuilder(MetricName(appMetricsRegistry.appPrefix), metricRegistry)
 
-  protected val appMetricsRegistry: BaseAppMetricsRegistry
-  override val metricRegistry = appMetricsRegistry.metricRegistry
+  protected def appMetricsRegistry: BaseAppMetricsRegistry
+
+  override lazy val metricRegistry = appMetricsRegistry.metricRegistry
 }
