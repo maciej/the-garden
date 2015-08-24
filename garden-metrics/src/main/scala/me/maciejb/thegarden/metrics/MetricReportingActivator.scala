@@ -2,7 +2,7 @@ package me.maciejb.thegarden.metrics
 
 import java.util.concurrent.TimeUnit
 
-import com.codahale.metrics.graphite.{GraphiteReporter, GraphiteUDP}
+import com.codahale.metrics.graphite.{Graphite, GraphiteReporter, GraphiteUDP}
 import com.codahale.metrics.{Metric, MetricFilter, ScheduledReporter, Slf4jReporter}
 import com.typesafe.scalalogging.{Logger, StrictLogging}
 import org.slf4j.LoggerFactory
@@ -39,13 +39,17 @@ class MetricReportingActivator(config: MetricsConfig, appMetricsRegistry: BaseAp
         }
 
         for (c <- config.graphiteReporterOpt if c.enabled) {
-          val graphite = new GraphiteUDP(c.host, c.port)
+          val sender = c.proto match {
+            case GraphiteProtocols.Udp => new GraphiteUDP(c.host, c.port)
+            case GraphiteProtocols.Tcp => new Graphite(c.host, c.port)
+          }
+
           val graphiteReporter = GraphiteReporter.forRegistry(appMetricsRegistry.metricRegistry)
             .prefixedWith(c.prefix)
             .convertRatesTo(TimeUnit.SECONDS)
             .convertDurationsTo(TimeUnit.MILLISECONDS)
             .filter(MetricFilter.ALL)
-            .build(graphite)
+            .build(sender)
 
           graphiteReporter.start(c.frequency.getSeconds, TimeUnit.SECONDS)
 
