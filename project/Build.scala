@@ -4,6 +4,10 @@ import sbt.Keys._
 import sbt._
 import sbtrelease.ReleasePlugin._
 
+object Versions {
+  val metrics = "3.1.2"
+}
+
 object Dependencies {
 
   private val slf4jVersion = "1.7.12"
@@ -78,6 +82,13 @@ object Dependencies {
     json4s,
     json4sExt
   ) ++ spray ++ akka
+
+  def metricsModule(m: String) = "io.dropwizard.metrics" % m % Versions.metrics % "provided"
+  val metricsCore = metricsModule("metrics-core")
+  val metricsGraphite = metricsModule("metrics-graphite")
+  val metricsJvm = metricsModule("metrics-jvm")
+  val metricsScala = "nl.grons" %% "metrics-scala" % "3.5.1_a2.3" % "provided"
+  val metrics = Seq(metricsCore, metricsScala, metricsGraphite, metricsJvm)
 
   def inCompileScope(deps: Seq[ModuleID]): Seq[ModuleID] = deps.map(_.copy(configurations = Some("compile")))
 
@@ -160,7 +171,6 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= mongodbStack ++ logging ++ scalatestForTestingModules ++ Seq(fongoInCompileScope)
     )
 
-
   lazy val gardenScalatra = GardenProject(id = "garden-scalatra",
     base = file("garden-scalatra")).settings(
       libraryDependencies ++= scalatraStack
@@ -186,8 +196,13 @@ object TheGardenBuild extends Build {
       libraryDependencies ++= akka
     ) dependsOn lawn
 
+  lazy val gardenMetrics = GardenProject(id = "garden-metrics",
+    base = file("garden-metrics")).settings(
+      libraryDependencies ++= metrics
+    ) dependsOn lawn
+
   lazy val theGarden = GardenProject(id = "the-garden",
     base = file("")).aggregate(lawn, mongodb, shrubs, mongodbTest, gardenScalatra,
-      gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka)
+      gardenSpray, gardenSprayTestkit, gardenJson4s, gardenAkka, gardenMetrics)
 
 }

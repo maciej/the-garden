@@ -70,6 +70,7 @@ class ConfigExtensionMethods(val c: Config) extends AnyVal {
   def getStringOpt(path: String) = Option(getStringOr(path))
   def getPropertiesOpt(path: String) = Option(getPropertiesOr(path))
   def getDurationOpt(path: String) = if (c.hasPath(path)) Some(getDurationOr(path)) else None
+  def getConfigOpt(path: String) = if (c.hasPath(path)) Some(c.getConfig(path)) else None
 
 }
 
