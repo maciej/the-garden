@@ -14,7 +14,6 @@ object Dependencies {
   val logging = Seq(
     "org.slf4j" % "slf4j-api" % slf4jVersion,
     "org.slf4j" % "log4j-over-slf4j" % slf4jVersion,
-    "ch.qos.logback" % "logback-classic" % "1.1.1",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
   )
 
@@ -22,7 +21,8 @@ object Dependencies {
   val baseDependencies = Seq(
     "com.typesafe" % "config" % "1.3.0",
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
-    "org.mockito" % "mockito-core" % "1.9.5" % "test"
+    "org.mockito" % "mockito-core" % "1.9.5" % "test",
+    "ch.qos.logback" % "logback-classic" % "1.1.1" % "test"
   )
 
   val scalatestForTestingModules = Seq(
