@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter, GraphiteUDP}
 import com.codahale.metrics.{Metric, MetricFilter, ScheduledReporter, Slf4jReporter}
 import com.typesafe.scalalogging.{Logger, StrictLogging}
+import nl.grons.metrics.scala.Implicits._
 import org.slf4j.LoggerFactory
 
 import scala.language.implicitConversions
@@ -13,8 +14,6 @@ import scala.util.control.NonFatal
 class MetricReportingActivator(config: MetricsConfig, appMetricsRegistry: BaseAppMetricsRegistry,
                                metricsLogger: Logger = Logger(LoggerFactory.getLogger("metrics")))
   extends StrictLogging {
-
-  import MetricImplicits._
 
   private[this] var reporters: List[ScheduledReporter] = Nil
   private[this] var activated: Boolean = false

@@ -83,11 +83,11 @@ object Dependencies {
     json4sExt
   ) ++ spray ++ akka
 
-  def metricsModule(m: String) = "io.dropwizard.metrics" % m % Versions.metrics % "provided"
+  def metricsModule(m: String) = "io.dropwizard.metrics" % m % Versions.metrics
   val metricsCore = metricsModule("metrics-core")
   val metricsGraphite = metricsModule("metrics-graphite")
   val metricsJvm = metricsModule("metrics-jvm")
-  val metricsScala = "nl.grons" %% "metrics-scala" % "3.5.1_a2.3" % "provided"
+  val metricsScala = "nl.grons" %% "metrics-scala" % "3.5.2_a2.3"
   val metrics = Seq(metricsCore, metricsScala, metricsGraphite, metricsJvm)
 
   def inCompileScope(deps: Seq[ModuleID]): Seq[ModuleID] = deps.map(_.copy(configurations = Some("compile")))
