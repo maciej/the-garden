@@ -87,7 +87,7 @@ object Dependencies {
   val metricsCore = metricsModule("metrics-core")
   val metricsGraphite = metricsModule("metrics-graphite")
   val metricsJvm = metricsModule("metrics-jvm")
-  val metricsScala = "nl.grons" %% "metrics-scala" % "3.5.2_a2.3"
+  val metricsScala = "nl.grons" %% "metrics-scala" % "3.5.2" % "provided"
   val metrics = Seq(metricsCore, metricsScala, metricsGraphite, metricsJvm)
 
   def inCompileScope(deps: Seq[ModuleID]): Seq[ModuleID] = deps.map(_.copy(configurations = Some("compile")))
