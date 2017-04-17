@@ -139,7 +139,8 @@ object TheGardenBuild extends Build {
     Keys.scalaVersion := scalaVersion,
     ReleaseKeys.crossBuild := false,
     crossScalaVersions := Seq(scalaVersion),
-    libraryDependencies ++= baseDependencies
+    libraryDependencies ++= baseDependencies,
+    resolvers += DefaultMavenRepository
   ) ++ releaseSettings
 
   def GardenProject(id: String, base: File,
